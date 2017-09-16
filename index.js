@@ -5,8 +5,8 @@ const BotToken = 'MzU4NTE1Mzk3MDgwOTA3ODAz.DJ54Jg.aPb0MKQOuNhVCOlWnxYAKb7fhNA'
 const prefix = '/>'
 
 const Commands = {
-	"Ping": function(parameters, msgObj){
-		msgObj.Channel.send("Pong!");
+	"ping": function(parameters, msgObj){
+		msgObj.channel.sendMessage("Pong!");
 	}
 }
 
@@ -15,17 +15,19 @@ Bot.on('ready', () => {
 });
 
 function ProcessCommand(content, msgObj) {
-	var words = content.split("");
+	var words = content.split(" ");
+	console.log(words, content);
 	if (Commands[words[0]]) {
 		Commands[words[0]](words.splice(0, 1), msgObj);
 	}
 }
 
 Bot.on('message', (Message) => {
-	if (Message.author == Bot) return;
+	if (Message.author == Bot) {return 0;};
 
-	var content = Message.content.toLowerCase
-	if (StringM(content.startsWith).startsWith(prefix)) {
+	var content = Message.content.toLowerCase();
+	console.log(StringM(content).startsWith(prefix), content);
+	if (StringM(content).startsWith(prefix)) {
 		ProcessCommand(StringM(content).chompLeft("/>"), Message);
 	}
 });
