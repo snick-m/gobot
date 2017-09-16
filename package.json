@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "better-pastebin": "^0.4.1",
     "discord.js": "^11.2.1",
     "string": "^3.3.3"
   },

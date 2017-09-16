@@ -1,12 +1,44 @@
 const Discord = require('discord.js');
 const StringM = require('string');
+const fs = require('fs');
+const paste = require('better-pastebin');
 const Bot = new Discord.Client();
 const BotToken = 'MzU4NTE1Mzk3MDgwOTA3ODAz.DJ54Jg.aPb0MKQOuNhVCOlWnxYAKb7fhNA'
 const prefix = '/>'
 
+var RMembers;
+
+paste.setDevKey('d517dc40234f2879fc60d44d72c6735c');
+paste.login('Mushfiq', '@mim@hin100', function(success, data){
+	if (success) {
+		paste.get('QxfVgU67', function(s, d){
+			RMembers = d;
+		});
+	}
+});
+
 const Commands = {
 	"ping": function(parameters, msgObj){
 		msgObj.channel.sendMessage("Pong!");
+	},
+	"register": function(parameters, msgObj){
+		var author = msgObj.author;
+		paste.get('QxfVgU67', function(s, d){
+			RMembers = JSON.parse(d);
+		});
+		if (RMembers[author.id.toString()]) {msgObj.channel.sendMessage("${author}, You're already registered.")}
+		else {
+			if (StringM(parameters[0]).isNumeric && parameters[1].length == 1 && StringM(parameters[2]).isNumeric && parameters[2].length == 1) {
+				var newMember = {
+					"Class": parseInt(parameters[0]),
+					"Section": parameters[1],
+					"Roll": parseInt(parameters[2])
+				}
+				RMembers[author.id.toString()] = newMember;
+			} else {
+				msgObj.channel.sendMessage("${author}, Your info format is wrong. Please format it as '/>register <class> <section> <roll>' ")
+			}
+		}
 	}
 }
 
