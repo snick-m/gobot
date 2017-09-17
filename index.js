@@ -32,7 +32,7 @@ const Commands = {
 			msgObj.member.addRole(Bot.guilds.get(DevServerID).roles.get(MemberID));
 			fs.writeFileSync(RDatabase, JSON.stringify(RMembers, null, 4));
 			msgObj.channel.send(`${author}, You've been successfully registered and have been granted access to the complete server! \nKeep Calm and Build On!`);
-			Bot.guilds.get(DevServerID).channels.get(DBChannel).send(JSON.stringify(RMembers, null, 4), {"code":"json"});
+			Bot.guilds.get(DevServerID).channels.get(DBChannel).send(JSON.stringify(JSON.parse(fs.readFileSync(RDatabase)), null, 4), {"code":"json"});
 		} else {
 			msgObj.channel.send(`${author}, Your info format is wrong. Please format it as '/>register <class> <section> <roll>' `)
 		}
