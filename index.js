@@ -38,7 +38,7 @@ const Commands = {
 		}
 	},
 	"clear": function(parameters, msgObj) {
-		if (message.member.hasPermission("ADMINISTRATOR")) {
+		if (msgObj.member.hasPermission("ADMINISTRATOR")) {
 			if (parameters[1] && StringM(parameters[1]).isNumeric && parameters[1] <= 100) {
 				msgObj.channel.bulkDelete(parameters[1])
 			} else {msgObj.channel.bulkDelete();}
