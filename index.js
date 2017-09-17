@@ -21,7 +21,7 @@ const Commands = {
 		var author = msgObj.author;
 		RMembers = JSON.parse(fs.readFileSync(RDatabase));
 		if (RMembers[author.id.toString()]) {msgObj.channel.send(`${author}, You're already registered.`)}
-		if (parameters.length == 4 && StringM(parameters[1]).isNumeric() && parameters[2].length == 1 && StringM(parameters[3]).isNumeric() && parameters[3].length == 2) {
+		else if (parameters.length == 4 && StringM(parameters[1]).isNumeric() && parameters[2].length == 1 && StringM(parameters[3]).isNumeric() && parameters[3].length == 2) {
 			var newMember = {
 				"Class": parseInt(parameters[1]),
 				"Section": parameters[2],
