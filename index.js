@@ -41,7 +41,7 @@ const Commands = {
 		if (msgObj.member.hasPermission("ADMINISTRATOR")) {
 			if (parameters[1] && StringM(parameters[1]).isNumeric && parameters[1] <= 100) {
 				msgObj.channel.bulkDelete(parameters[1])
-			} else {msgObj.channel.bulkDelete();}
+			} else {msgObj.channel.bulkDelete(100);}
 		}
 	}
 }
