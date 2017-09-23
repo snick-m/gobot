@@ -26,7 +26,7 @@ const Commands = {
 				"Class": parseInt(parameters[1]),
 				"Section": parameters[2],
 				"Roll": parseInt(parameters[3]),
-				"Date": (new Date()).getDay() + (new Date()).getFullYear()
+				"Date": (new Date()).getDate() + '-' + ((new Date()).getMonth() + 1) + '-' +  (new Date()).getFullYear()
 			}
 			RMembers[author.id.toString()] = newMember;
 			msgObj.member.addRole(Bot.guilds.get(DevServerID).roles.get(MemberID));
