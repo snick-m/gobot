@@ -11,7 +11,8 @@
   "description": "",
   "dependencies": {
     "better-pastebin": "^0.4.1",
-    "discord.js": "^11.2.1",
+    "discord.js": "^11.3.0",
+    "mongodb": "^2.2.31",
     "string": "^3.3.3"
   },
   "engines": {
