@@ -10,9 +10,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "asyncawait": "^1.0.6",
     "better-pastebin": "^0.4.1",
     "discord.js": "^11.3.0",
     "mongodb": "^2.2.31",
+    "sleep": "^5.1.1",
     "string": "^3.3.3"
   },
   "engines": {

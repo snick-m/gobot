@@ -1,23 +1,9 @@
 const Discord = require('discord.js');
 const StringM = require('string');
-const fs = require('fs');
+const sleep = require('sleep');
 const Bot = new Discord.Client();
 const BotToken = 'Mzc2Mzc5NDA2MDU2NDIzNDI2.DN9iLQ.NiFSTLfymZ-xtTl5fK9O-bAuV7A'
-const prefix = 'gob>'
-
-/* This is block is from a previous bot. Might need it later.
-const paste = require('better-pastebin');
-
-const DB = require('mongodb').MongoClient
-const assert = require('assert')
-
-// const RDatabase = "./rdb.json"
-const DBChannel = "358859276397051905"
-const DevServerID = "358292291687022592"
-const MemberID = "358498899201097728"
-
-var RMembers;
-*/
+var prefix = '>'
 
 const Commands = {
 	"ping": function(parameters, msgObj){
@@ -31,23 +17,19 @@ const Commands = {
 	},
 
 	"mute": function(parameters, msgObj){
-		if (msgObj.mentions.members && msgObj.guild.member(msgObj.author).hasPermission("MANAGE_MESSAGES")){
+		if (msgObj.mentions.members.first() && msgObj.guild.member(msgObj.author).hasPermission("MANAGE_MESSAGES")){
 			let user = msgObj.channel.guild.member(msgObj.mentions.members.first());
 			let muteRole = msgObj.channel.guild.roles.find(r => r.name == "MutedByGOBot");
-			if(!muteRole){
-				muteRole = msgObj.channel.guild.createRole({
-					name: "MutedByGOBot",
-					color: "#0000000",
-					permissions: []
-				});
 
-				msgObj.guild.channels.forEach(channel => {
-					channel.overwritePermissions(muteRole, {
-						SEND_MESSAGES: false,
-						ADD_REACTIONS: false
-					});
+			if(!muteRole){msgObj.reply("Please create a role named 'MutedByGOBot' and run the command again."); return}
+		
+			msgObj.guild.channels.forEach(function(channel,id) {		
+				channel.overwritePermissions(muteRole, {
+					SEND_MESSAGES: false,
+					ADD_REACTIONS: false
 				});
-			}
+			});
+
 			if (!user.roles.has(muteRole.id)){
 				user.addRole(muteRole);
 				msgObj.reply(`Muted ${user.user} successfully!`);
@@ -57,7 +39,7 @@ const Commands = {
 		} else {return}
 	},
 	"unmute": function(parameters, msgObj){
-		if (msgObj.mentions.members && msgObj.guild.member(msgObj.author).hasPermission("MANAGE_MESSAGES")){
+		if (msgObj.mentions.members.first() && msgObj.guild.member(msgObj.author).hasPermission("MANAGE_MESSAGES")){
 			let user = msgObj.channel.guild.member(msgObj.mentions.members.first());
 			let muteRole = msgObj.channel.guild.roles.find(r => r.name == "MutedByGOBot");
 			if (!muteRole) {
@@ -74,23 +56,35 @@ const Commands = {
 	},
 
 	"kick": function(parameters, msgObj){
-		if (msgObj.mentions.members && msgObj.guild.member(msgObj.author).hasPermission("KICK_MEMBERS")){
+		if (msgObj.mentions.members.first() && msgObj.guild.member(msgObj.author).hasPermission("KICK_MEMBERS")){
 			let user = msgObj.guild.member(msgObj.mentions.members.first());
 			user.kick();
 			msgObj.reply(`Kicked "${user.user.username}" successfully!`);
 		} else {return}
 	},
 	"ban": function(parameters, msgObj){
-		if (msgObj.mentions.members && msgObj.guild.member(msgObj.author).hasPermission("BAN_MEMBERS")){
+		if (msgObj.mentions.members.first() && msgObj.guild.member(msgObj.author).hasPermission("BAN_MEMBERS")){
 			let user = msgObj.guild.member(msgObj.mentions.members.first());
 			user.ban();
 			msgObj.reply(`Banned "${user.user.username}" successfully!`);
 		} else {return}
 	},
+	"setprefix": function(parameters, msgObj){
+		if (parameters[1] && (typeof parameters[1] === 'string' || parameters[1] instanceof String) && msgObj.guild.member(msgObj.author).hasPermission("MANAGE_SERVER")) {
+			prefix = parameters[1];
+			msgObj.reply(`Prefix for GOBot has been set to ${parameters[1]}`);
+		}
+	},
+	"warn": function(parameters, msgObj){
+		if (msgObj.mentions.members.first() && msgObj.guild.member(msgObj.author).hasPermission("BAN_MEMBERS")){
+			msgObj.mentions.members.first().send(`You are to take this message as a warning from ${msgObj.guild.name}. Be careful from now on or you might get a kick or ban.`)
+			msgObj.reply(`${msgObj.mentions.members.first()} has been warned.`);
+		}
+	},
 
 	"help": function(parameters, msgObj){
 		msgObj.author.send(
-			`\`Bot Prefix :-\` \`\`\`${prefix}\`\`\`\n` + "`Initial Commands :-` ```ping => Bot Replies 'Pong!' if it's up.\nwhereami => Tells you the name of the server you are in.\ncredits => Shows you staff roster of GOB``` `Modration Commands :-` ```mute => gob>mute @user => Mutes the user in the server the command is used in.\nunmute => gob>unmute @user => Unmutes the user in the server the command is used in.\nkick => gob>kick @user => Kicks the user.\nban => gob>ban @user => Bans the user from the Discord Server.```"
+			`\`Bot Prefix :-\` \`\`\`${prefix}\`\`\`\n` + "`Initial Commands :-` ```ping => Bot Replies 'Pong!' if it's up.\nwhereami => Tells you the name of the server you are in.\ncredits => Shows you staff roster of GOB``` \n`Modration Commands :-` ```mute => gob>mute @user => Mutes the user in the server the command is used in.\nunmute => gob>unmute @user => Unmutes the user in the server the command is used in.\nkick => gob>kick @user => Kicks the user.\nban => gob>ban @user => Bans the user from the Discord Server.\nsetprefix => gob>setprefix prefix => Changes the prefix from gob> to your desired prefix.\nwarn => gob>warn @user => Warns the mentioned user.```"
 		)
 		msgObj.reply("Commands list has been delivered to your DM :e_mail: !");
 	}
